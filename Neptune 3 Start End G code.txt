@@ -1,0 +1,70 @@
+; Start G-Code 
+
+; Script based on an original created by tjjfvi (https://github.com/tjjfvi)
+; An up-to-date version of the tjjfvi's original script can be found
+; here: https://csi.t6.fyi/
+; Note - This script will only work in Cura V4.2 and above!
+; --- Global Settings
+; layer_height = {layer_height}
+; smooth_spiralized_contours = {smooth_spiralized_contours}
+; magic_mesh_surface_mode = {magic_mesh_surface_mode}
+; machine_extruder_count = {machine_extruder_count}
+; --- Single Extruder Settings
+; speed_z_hop = {speed_z_hop}
+; retraction_amount = {retraction_amount}
+; retraction_hop = {retraction_hop}
+; retraction_hop_enabled = {retraction_hop_enabled}
+; retraction_enable = {retraction_enable}
+; retraction_speed = {retraction_speed}
+; retraction_retract_speed = {retraction_retract_speed}
+; retraction_prime_speed = {retraction_prime_speed}
+; speed_travel = {speed_travel}
+
+
+M104 S140 ;Heat extruder to 140
+
+M109 S140 ; Wait for extruder to reach 140
+
+G28 ;home
+
+G29 ; Auto Leveling
+
+M420 S1 ;G29 Run/Find AUto leveling Mesh
+
+M104 S{material_print_temperature_layer_0} ;Start heating extruder
+
+M109 S{material_print_temperature_layer_0} ;Wait for extruder to reach temp before proceeding
+
+G92 E0 ;Reset Extruder
+
+G1 Z4.0 F3000 ;Move Z Axis up
+
+G92 E0 ;Reset Extruder
+
+G1 X1.1 Y20 Z0.28 F5000.0 ;Move to start position
+
+G1 X1.1 Y80.0 Z0.28 F1500.0 E10 ;Draw the first line
+
+G1 X1.4 Y80.0 Z0.28 F5000.0 ;Move to side a little
+
+G1 X1.4 Y20 Z0.28 F1500.0 E20 ;Draw the second line
+
+G92 E0 ;Reset Extruder
+
+G1 Z2.0 F3000 ;Move Z Axis up
+
+;End G-Code
+
+
+G91 ;Relative positionning
+G1 E-2 F2700 ;Retract a bit
+G1 E-2 Z0.2 F1600 ;Retract and raise Z
+G1 X5 Y5 F3000 ;Wipe out
+G1 Z10 ;Raise Z more
+G90 ;Absolute positionning
+G1 X0 Y{machine_depth} ;Present print
+M106 S0 ;Turn-off fan
+M104 S0 ;Turn-off hotend
+M140 S0 ;Turn-off bed
+M84 X Y E ;Disable all steppers but Z
+
